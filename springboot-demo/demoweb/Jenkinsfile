@@ -2,6 +2,9 @@ pipeline {
    environment {
     image = "062211046697.dkr.ecr.us-east-2.amazonaws.com/springboot-demoweb"
 	version = "1.0.0.$BUILD_NUMBER"
+	NAMESPACE= "springboot-demoweb"
+	RELEASE_NAME = "springboot-demoweb"
+	
    }
   agent {
     node {
@@ -51,6 +54,12 @@ pipeline {
                 input(id: "Deploy in K8s", message: "Do You want to proceed further for deployment in k8s", ok: 'Deploy')
               }
             }
+        }
+    }
+	
+	stage('Deploy in K8s') {
+       steps {
+             sh 'cd springboot-demo/demoweb/charts/springboot-demoweb && helm install -n $NAMESPACE $RELEASE_NAME .'
         }
     }
 	  
