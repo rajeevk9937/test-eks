@@ -17,17 +17,17 @@ pipeline {
     }
     stage('Test') {
       steps {
-        sh 'mvn test '
+        sh 'cd springboot-demo/demoweb && mvn test '
       }
     }
     stage('Image Build&Publish') {
       steps {
         echo 'Build Images'
         script {
-           sh '''docker build -t $image:$version .
-		         $(aws ecr get-login --no-include-email --region us-east-2 | sed 's|https://||')
-		         docker push $image:$version
-				 docker rmi $image:$version
+           sh '''docker build -t $image:$version ./springboot-demo/demoweb/
+		 $(aws ecr get-login --no-include-email --region us-east-2 | sed 's|https://||')
+		docker push $image:$version
+		docker rmi $image:$version
 				 
 		   '''
             
