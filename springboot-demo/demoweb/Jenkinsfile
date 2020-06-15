@@ -66,8 +66,7 @@ pipeline {
 	     aws eks --region $region update-kubeconfig --name $cluster_name
 	     echo "Changing values file for built tag $version"
 	     cd springboot-demo/demoweb/charts/springboot-demoweb
-	     sed 's/imagetag/$version/' values.yaml >> values.yaml_orig
-	     mv values.yaml_orig >> values.yaml
+	     sed -i 's/imagetag/$version/' values.yaml
 	     helm upgrade -n $NAMESPACE $RELEASE_NAME .
 	     """
         }
