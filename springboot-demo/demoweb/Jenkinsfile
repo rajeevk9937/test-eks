@@ -20,6 +20,14 @@ pipeline {
         sh 'cd springboot-demo/demoweb && mvn test '
       }
     }
+	  
+	  stage('Code Qulaity') {
+      steps {
+        sh 'cd springboot-demo/demoweb && mvn sonar:sonar -Dsonar.host.url=http://0.0.0.0:9000'
+      }
+    }
+	  
+	  
     stage('Image Build&Publish') {
       steps {
         echo 'Build Images'
