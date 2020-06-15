@@ -64,7 +64,11 @@ pipeline {
              sh '''
 	     echo " Update the kubeconfig"
 	     aws eks --region $region update-kubeconfig --name $cluster_name
-	     cd springboot-demo/demoweb/charts/springboot-demoweb && helm install -n $NAMESPACE $RELEASE_NAME .
+	     echo "Changing values file for built tag $version"
+	     cd springboot-demo/demoweb/charts/springboot-demoweb
+	     sed 's/imagetag/$version/' values.yaml >> values.yaml_orig
+	     mv values.yaml_orig >> values.yaml
+	     helm upgrade -n $NAMESPACE $RELEASE_NAME .
 	     '''
         }
     }
