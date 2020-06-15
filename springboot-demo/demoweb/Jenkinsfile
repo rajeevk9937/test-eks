@@ -21,7 +21,7 @@ pipeline {
       }
     }
 	  
-	  stage('Code Qulaity') {
+	  stage('Code Quality') {
       steps {
         sh 'cd springboot-demo/demoweb && mvn sonar:sonar -Dsonar.host.url=http://0.0.0.0:9000'
       }
@@ -43,5 +43,16 @@ pipeline {
 
       }
     }
+	
+	 stage('Approval for Deployment in K8s') {
+       steps {
+            script {
+              timeout(time: 10, unit: 'MINUTES') {
+                input(id: "Deploy in K8s", message: "Do You want to proceed further for deployment in k8s", ok: 'Deploy')
+              }
+            }
+        }
+    }
+	  
   }
 }
