@@ -1,8 +1,7 @@
 pipeline {
    environment {
-     REGISTRY_ENDPOINT = "https://binblee/v2/"
-     IMAGE_WITH_TAG = "binblee/springboot-helm-chart"
-     REGISTRY_CERTS = "registry"
+    image = "062211046697.dkr.ecr.us-east-2.amazonaws.com/springboot-demoweb"
+	version = "1.0.0.$BUILD_NUMBER"
    }
   agent {
     node {
@@ -25,8 +24,13 @@ pipeline {
       steps {
         echo 'Build Images'
         script {
-           sh 'docker build -t ${IMAGE}:$TAG .'
-            sh 'docker push ${IMAGE_WITH_TAG}'
+           sh '''docker build -t $image:$version .
+		         $(aws ecr get-login --no-include-email --region us-east-2 | sed 's|https://||')
+		         docker push $image:$version
+				 docker rmi $image:$version
+				 
+		   '''
+            
            }
 
       }
