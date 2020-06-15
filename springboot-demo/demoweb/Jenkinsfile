@@ -12,7 +12,7 @@ pipeline {
   stages {
     stage('Build') {
       steps {
-        sh 'mvn package'
+        sh 'cd springboot-demo/demoweb && mvn package'
       }
     }
     stage('Test') {
