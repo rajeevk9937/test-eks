@@ -61,7 +61,7 @@ pipeline {
 	
 	stage('Deploy in K8s') {
        steps {
-             sh '''
+             sh """
 	     echo " Update the kubeconfig"
 	     aws eks --region $region update-kubeconfig --name $cluster_name
 	     echo "Changing values file for built tag $version"
@@ -69,7 +69,7 @@ pipeline {
 	     sed 's/imagetag/$version/' values.yaml >> values.yaml_orig
 	     mv values.yaml_orig >> values.yaml
 	     helm upgrade -n $NAMESPACE $RELEASE_NAME .
-	     '''
+	     """
         }
     }
 	  
