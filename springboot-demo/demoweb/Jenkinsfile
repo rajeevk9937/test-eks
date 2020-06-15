@@ -4,6 +4,8 @@ pipeline {
 	version = "1.0.0.$BUILD_NUMBER"
 	NAMESPACE= "springboot-demoweb"
 	RELEASE_NAME = "springboot-demoweb"
+	region= "us-east-2"
+	cluster_name= "Cluster-avMYie8MkKMO"
 	
    }
   agent {
@@ -59,7 +61,11 @@ pipeline {
 	
 	stage('Deploy in K8s') {
        steps {
-             sh 'cd springboot-demo/demoweb/charts/springboot-demoweb && helm install -n $NAMESPACE $RELEASE_NAME .'
+             sh '''
+	     echo " Update the kubeconfig"
+	     aws eks --region $region update-kubeconfig --name $cluster_name
+	     cd springboot-demo/demoweb/charts/springboot-demoweb && helm install -n $NAMESPACE $RELEASE_NAME .
+	     '''
         }
     }
 	  
